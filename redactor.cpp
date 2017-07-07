@@ -7,13 +7,62 @@ Redactor::Redactor(QWidget *parent) : QMainWindow(parent), ui(new Ui::Redactor)
     ui->setupUi(this);
     StudentTable *model = new StudentTable;
     ui->mainTable->setModel(model);
-    //bool value = model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    //model->setHeaderData(1, Qt::Horizontal, "Name");
-    //model->setHeaderData(2, Qt::Horizontal, QObject::tr("City"));
-    //model->setHeaderData(3, Qt::Horizontal, QObject::tr("Country"));
 }
 
 Redactor::~Redactor()
 {
     delete ui;
+}
+
+void Redactor::on_actionOpen_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QString(),
+            tr("Dat Files (*.dat)"));
+
+    if (!fileName.isEmpty())
+    {
+        QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly))
+        {
+            QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+            return;
+        }
+        QTextStream in(&file);
+        ui->textEdit->setText(in.readAll());
+        file.close();
+    }
+}
+
+
+void Redactor::on_actionSave_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), QString(),
+            tr("Text Files (*.txt);;C++ Files (*.cpp *.h)"));
+
+    if (!fileName.isEmpty())
+    {
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly))
+        {
+            QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+            return;
+        }
+        else
+        {
+            QTextStream stream(&file);
+            stream << ui->textEdit->toPlainText();
+            stream.flush();
+            file.close();
+        }
+    }
+}
+
+
+void Redactor::on_actionAbout_triggered()
+{
+}
+
+void Redactor::on_actionQuit_triggered()
+{
+     QApplication::quit();
 }

@@ -75,6 +75,7 @@ bool StudentTable::setHeaderData(int section, Qt::Orientation orientation, const
     return true;
 }
 */
+
 Qt::ItemFlags StudentTable::flags(const QModelIndex &index) const
 {
     return 0;

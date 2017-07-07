@@ -16,6 +16,15 @@ public:
     explicit Redactor(QWidget *parent = 0);
     ~Redactor();
 
+private slots:
+    void on_actionOpen_triggered();
+
+    void on_actionSave_triggered();
+
+    void on_actionAbout_triggered();
+
+    void on_actionQuit_triggered();
+
 private:
     Ui::Redactor *ui;
 };
