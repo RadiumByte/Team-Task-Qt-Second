@@ -2,6 +2,9 @@
 #define REDACTOR_H
 
 #include <QMainWindow>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QTextStream>
 
 namespace Ui
 {
@@ -24,6 +27,8 @@ private slots:
     void on_actionAbout_triggered();
 
     void on_actionQuit_triggered();
+
+    void on_actionCreate_new_triggered();
 
 private:
     Ui::Redactor *ui;

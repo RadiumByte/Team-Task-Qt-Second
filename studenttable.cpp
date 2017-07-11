@@ -20,20 +20,31 @@ int StudentTable::rowCount(const QModelIndex &parent) const
 
 int StudentTable::columnCount(const QModelIndex &parent) const
 {
-    return 4;
+    return 3;
 }
 
 QVariant StudentTable::data(const QModelIndex &index, int role) const
 {
+    if (role == Qt::DisplayRole)
+    {
+        switch (index.column())
+        {
+        case 0: return tr(students.at(index.row()).name);
+        case 1: return students.at(index.row()).group;
+        case 2: return students.at(index.row()).course;
+        default: break;
+        }
+    }
     return QVariant();
 }
 
 bool StudentTable::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    /*
     if (role == Qt::EditRole)
     {
         m_gridData[index.row()][index.column()] = value.toString();
-        //for presentation purposes only: build and emit a joined string
+
         QString result;
         for (int row= 0; row < ROWS; row++)
         {
@@ -44,6 +55,7 @@ bool StudentTable::setData(const QModelIndex &index, const QVariant &value, int 
         }
         emit editCompleted( result );
     }
+    */
     return true;
 }
 
@@ -56,12 +68,10 @@ QVariant StudentTable::headerData(int section, Qt::Orientation orientation, int 
             switch (section)
             {
             case 0:
-                return QString("ID");
-            case 1:
                 return QString("Name");
-            case 2:
+            case 1:
                 return QString("Course");
-            case 3:
+            case 2:
                 return QString("Group");
             }
         }
@@ -69,17 +79,35 @@ QVariant StudentTable::headerData(int section, Qt::Orientation orientation, int 
     return QVariant();
 }
 
-/*
-bool StudentTable::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
+bool operator<<(QDataStream &output, const StudentTable::Person &item)
 {
+    output << item.course;
+    output << item.group;
+    output.writeBytes(item.name,NAME_SIZE);
     return true;
 }
-*/
 
-Qt::ItemFlags StudentTable::flags(const QModelIndex &index) const
+bool operator>>(QDataStream &input, StudentTable::Person &item)
 {
-    return 0;
+    input >> item.course;
+    input >> item.group;
+    char* name;
+    uint size = NAME_SIZE;
+    input.readBytes(name,size);
+    item.name = (char*)name;
+    return true;
 }
 
-
-
+void StudentTable::drawRow(QVector<StudentTable::Person> items)
+{
+    beginInsertRows(QModelIndex(), items.size(), items.size());
+    /*
+    S FF;
+    FF.Name = r;
+    FF.Name1 = n;
+    FF.Name2 = b;
+    FF.Name3 = z;
+    listclient.append(FF);
+    */
+    endInsertRows();
+}

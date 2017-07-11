@@ -4,9 +4,11 @@
 #include <QAbstractTableModel>
 #include <QVariant>
 #include <QObject>
+#include <QDataStream>
 
 #define COLS_COUNT 3
 #define ROWS_COUNT 5
+#define NAME_SIZE  30
 
 class StudentTable : public QAbstractTableModel
 {
@@ -24,8 +26,6 @@ public:
 
     //void sort (int column, Qt::SortOrder order = Qt::AscendingOrder); //!!сортировка
 
-//protected:
-    //bool            dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     bool            insertRows   (int position, int rows, const QModelIndex &index);
     bool            removeRows   (int position, int rows, const QModelIndex &index);
     int             rowCount     (const QModelIndex &parent = QModelIndex()) const;
@@ -33,13 +33,14 @@ public:
     QVariant        data         (const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool            setData      (const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     QVariant        headerData   (int section, Qt::Orientation orientation, int role) const;
-    //bool            setHeaderData(int section, Qt::Orientation orientation, const QVariant & value, int role = Qt::EditRole);
-    Qt::ItemFlags   flags        (const QModelIndex &index) const;
-    bool            readFile     (const QString filename);
-    bool            wrtieFile    (const QString filename);
+    void            drawRow    (QVector<StudentTable::Person> items);
 
-private:
-    QList <Person> students;
-
+    QVector <Person> students;
 };
+
+bool operator<<(QDataStream &output, const StudentTable::Person &item);
+
+bool operator>>(QDataStream &input, StudentTable::Person &item);
+Q_DECLARE_METATYPE(StudentTable::Person)
+Q_DECLARE_METATYPE(char*)
 #endif // STUDENTTABLE_H
