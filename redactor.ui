@@ -6,48 +6,92 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
-    <height>345</height>
+    <width>497</width>
+    <height>351</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>497</width>
+    <height>351</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>497</width>
+    <height>351</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+   </font>
+  </property>
+  <property name="cursor">
+   <cursorShape>PointingHandCursor</cursorShape>
+  </property>
   <property name="windowTitle">
-   <string>Redactor</string>
+   <string>Simple Table Redactor</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../Users/anton/OneDrive/Изображения/icon.PNG</normaloff>../../../Users/anton/OneDrive/Изображения/icon.PNG</iconset>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <property name="documentMode">
+   <bool>true</bool>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Triangular</enum>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTableView" name="mainTable">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>311</width>
-      <height>251</height>
+      <x>10</x>
+      <y>10</y>
+      <width>331</width>
+      <height>291</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="addButton">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>340</x>
       <y>10</y>
       <width>151</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>Добавить запись в таблице</string>
+     <string>Add new row</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="deleteButton">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>340</x>
       <y>60</y>
       <width>151</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>Удалить запись в таблице</string>
+     <string>Delete row </string>
     </property>
    </widget>
   </widget>
@@ -56,7 +100,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>516</width>
+     <width>497</width>
      <height>21</height>
     </rect>
    </property>

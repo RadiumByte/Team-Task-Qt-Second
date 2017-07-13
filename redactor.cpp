@@ -7,6 +7,8 @@ Redactor::Redactor(QWidget *parent) : QMainWindow(parent), ui(new Ui::Redactor)
     ui->setupUi(this);
     StudentTable *model = new StudentTable;
     ui->mainTable->setModel(model);
+    ui->mainTable->verticalHeader()->setVisible(true);
+    ui->mainTable->setShowGrid(true);
 }
 
 Redactor::~Redactor()
@@ -33,6 +35,8 @@ void Redactor::on_actionOpen_triggered()
 
             StudentTable::Person current;
             StudentTable *model = new StudentTable;
+
+            // reading from file
             while (true)
             {
                 input >> current;
@@ -67,16 +71,16 @@ void Redactor::on_actionSave_triggered()
             QDataStream output(&file);
             StudentTable::Person current;
             QModelIndex index;
+
+            // writing to file: read every cell, form new person, then write
             for (int i = 0; i < ui->mainTable->model()->rowCount(); ++i)
             {
                 index = ui->mainTable->model()->index(i,0);
-                QByteArray ba = (ui->mainTable->model()->data(index,Qt::DisplayRole)).value<QString>().toLatin1();
-                char *c_str = ba.data();
-                current.name = c_str;
+                current.name = ui->mainTable->model()->data(index, Qt::DisplayRole).value<QString>();
                 index = ui->mainTable->model()->index(i,1);
-                current.course = (ui->mainTable->model()->data(index,Qt::DisplayRole)).value<uint>();
+                current.course = (ui->mainTable->model()->data(index, Qt::DisplayRole)).value<uint>();
                 index = ui->mainTable->model()->index(i,2);
-                current.group = (ui->mainTable->model()->data(index,Qt::DisplayRole)).value<uint>();
+                current.group = (ui->mainTable->model()->data(index, Qt::DisplayRole)).value<uint>();
                 output << current;
             }
         }
@@ -95,6 +99,7 @@ void Redactor::on_actionQuit_triggered()
      QApplication::quit();
 }
 
+// creates three empty rows
 void Redactor::on_actionCreate_new_triggered()
 {
     StudentTable::Person current;
@@ -113,3 +118,19 @@ void Redactor::on_actionCreate_new_triggered()
     model->students.push_back(current);
     ui->mainTable->setModel(model);
 }
+
+void Redactor::on_addButton_clicked()
+{
+    QModelIndex current = ui->mainTable->currentIndex();
+    ui->mainTable->model()->insertRows(1, 1, current);
+}
+
+void Redactor::on_deleteButton_clicked()
+{
+    QModelIndex current = ui->mainTable->currentIndex();
+    if (ui->mainTable->model()->rowCount() != 1)
+    {
+        ui->mainTable->model()->removeRows(1, 1, current);
+    }
+}
+

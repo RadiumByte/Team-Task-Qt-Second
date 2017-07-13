@@ -1,15 +1,31 @@
 #include "studenttable.h"
+#include <algorithm>
 
 StudentTable::StudentTable(QObject *parent):QAbstractTableModel(parent)
 {}
 
 bool StudentTable::insertRows(int position, int rows, const QModelIndex &index)
 {
+    beginInsertRows(QModelIndex(), position, position);
+
+    Person p;
+    p.name = "";
+    p.course = 0;
+    p.group = 0;
+    students.resize(students.size()+1);
+    students.insert(index.row()+1, p);
+
+    endInsertRows();
     return true;
 }
 
 bool StudentTable::removeRows(int position, int rows, const QModelIndex &index)
 {
+    beginRemoveRows(QModelIndex(), position, position);
+
+    students.removeAt(index.row());
+
+    endRemoveRows();
     return true;
 }
 
@@ -29,9 +45,9 @@ QVariant StudentTable::data(const QModelIndex &index, int role) const
     {
         switch (index.column())
         {
-        case 0: return tr(students.at(index.row()).name);
-        case 1: return students.at(index.row()).group;
-        case 2: return students.at(index.row()).course;
+        case 0: return students.at(index.row()).name;
+        case 1: return students.at(index.row()).course;
+        case 2: return students.at(index.row()).group;
         default: break;
         }
     }
@@ -40,22 +56,34 @@ QVariant StudentTable::data(const QModelIndex &index, int role) const
 
 bool StudentTable::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    /*
     if (role == Qt::EditRole)
     {
-        m_gridData[index.row()][index.column()] = value.toString();
-
-        QString result;
-        for (int row= 0; row < ROWS; row++)
+        int row = index.row();
+        int col = index.column();
+        Person p = students.value(row);
+        switch (col)
         {
-            for(int col= 0; col < COLS; col++)
-            {
-                result += m_gridData[row][col] + ' ';
-            }
+        case 0:
+        {
+            p.name = value.value<QString>();
+            break;
         }
-        emit editCompleted( result );
+        case 1:
+        {
+            p.course = value.toUInt();
+            break;
+        }
+        case 2:
+        {
+            p.group = value.toUInt();
+            break;
+        }
+        default:
+            return false;
+        }
+        students.replace(row, p);
+        emit(dataChanged(index, index));
     }
-    */
     return true;
 }
 
@@ -83,7 +111,7 @@ bool operator<<(QDataStream &output, const StudentTable::Person &item)
 {
     output << item.course;
     output << item.group;
-    output.writeBytes(item.name,NAME_SIZE);
+    output << item.name;
     return true;
 }
 
@@ -91,23 +119,11 @@ bool operator>>(QDataStream &input, StudentTable::Person &item)
 {
     input >> item.course;
     input >> item.group;
-    char* name;
-    uint size = NAME_SIZE;
-    input.readBytes(name,size);
-    item.name = (char*)name;
+    input >> item.name;
     return true;
 }
 
-void StudentTable::drawRow(QVector<StudentTable::Person> items)
+Qt::ItemFlags StudentTable::flags(const QModelIndex &index) const
 {
-    beginInsertRows(QModelIndex(), items.size(), items.size());
-    /*
-    S FF;
-    FF.Name = r;
-    FF.Name1 = n;
-    FF.Name2 = b;
-    FF.Name3 = z;
-    listclient.append(FF);
-    */
-    endInsertRows();
+    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
 }

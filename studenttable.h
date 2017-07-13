@@ -17,14 +17,12 @@ class StudentTable : public QAbstractTableModel
 public:
     struct Person
     {
-        char*    name;
-        uint     course;
-        uint     group;
+        QString    name;
+        uint       course;
+        uint       group;
     };
 
     StudentTable(QObject *parent = 0);
-
-    //void sort (int column, Qt::SortOrder order = Qt::AscendingOrder); //!!сортировка
 
     bool            insertRows   (int position, int rows, const QModelIndex &index);
     bool            removeRows   (int position, int rows, const QModelIndex &index);
@@ -33,7 +31,7 @@ public:
     QVariant        data         (const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool            setData      (const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     QVariant        headerData   (int section, Qt::Orientation orientation, int role) const;
-    void            drawRow    (QVector<StudentTable::Person> items);
+    Qt::ItemFlags   flags        (const QModelIndex &index) const;
 
     QVector <Person> students;
 };
@@ -42,5 +40,5 @@ bool operator<<(QDataStream &output, const StudentTable::Person &item);
 
 bool operator>>(QDataStream &input, StudentTable::Person &item);
 Q_DECLARE_METATYPE(StudentTable::Person)
-Q_DECLARE_METATYPE(char*)
+
 #endif // STUDENTTABLE_H

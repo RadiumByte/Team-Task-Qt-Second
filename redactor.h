@@ -20,15 +20,26 @@ public:
     ~Redactor();
 
 private slots:
+    // open new document
     void on_actionOpen_triggered();
 
+    // save document
     void on_actionSave_triggered();
 
+    // about window
     void on_actionAbout_triggered();
 
+    // quit from program
     void on_actionQuit_triggered();
 
+    // create new document
     void on_actionCreate_new_triggered();
+
+    // add row after selected cell
+    void on_addButton_clicked();
+
+    // delete selected cell
+    void on_deleteButton_clicked();
 
 private:
     Ui::Redactor *ui;
