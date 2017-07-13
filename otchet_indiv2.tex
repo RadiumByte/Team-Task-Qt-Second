@@ -1,0 +1,256 @@
+\documentclass[a4paper]{article}
+\usepackage[14pt]{extsizes} % для того чтобы задать нестандартный 14-ый размер шрифта
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{setspace,amsmath}
+\usepackage[left=20mm, top=15mm, right=15mm, bottom=15mm, nohead, footskip=10mm]{geometry} % настройки полей документа
+
+\begin{document} % начало документа
+	
+	% НАЧАЛО ТИТУЛЬНОГО ЛИСТА
+	\begin{center}
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill\break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		{\LARGE Отчёт} \\
+		\hfill \break
+		А.А.Федяшов, Д.Е.Теплюков\\
+		\hfill \break
+		13.07.2017\\
+		\hfill \break
+		\hfill \break
+	\end{center}
+	
+	
+	\thispagestyle{empty} % выключаем отображение номера для этой страницы
+	
+	% КОНЕЦ ТИТУЛЬНОГО ЛИСТА
+\newpage
+
+% Вывод содержания проекта
+\newpage
+	{\section{Постановка задачи}
+	\hfill\break
+	{\bf 
+	Реализовать оконное приложение - редактор таблиц, поддерживающий следующие функции:\\}
+	1)открытие таблицы из бинарного файла\\
+	2)сохранение таблицы в бинарный файл\\
+	3)создание пустой таблицы для последующего заполнения\\
+	4)редактирование данных в ячейках\\
+	5)вставка пустой строки в произвольную позицию\\
+	6)удаление произвольной строки\\
+	{\bf Требования к реализации:}\\
+	1)Реализовать свой наследник класса QAbstractTableModel для отображения данных из файла\\
+	2)Переопределить метод setData для редактирования данных в файле\\
+	3)Добавить методы removeRow, insertRow для добавления и удаления записей из файла\\
+	4)Использовать поток QDataStream для чтения/записи данных\\
+	5)Использовать таблицу для отображения структур типа:\\
+	\hfill\break
+	\textit{(QString name, uint course, uint group)}\\
+}
+        
+          
+\newpage
+{\section{Содержание проекта}
+        \hfill\break
+        \hfill\break
+{\bf 1)Заголовочные файлы(.h)}\\
+        \hfill\break
+        \textit{redactor.h}-заголовочный файл диалогового окна. Содержит конструктор окна, заголовки функций - слотов, привязанных к определенным кнопкам в окне\\        
+        \hfill\break
+        \textit{studenttable.h}-заголовочный файл таблицы - наследника QAbstractTableModel. Содержит заголовки переопределенных функций для модели таблицы. Имеет определение вложенной структуры Person\\
+        \hfill\break
+        \hfill\break
+{\bf 2)Файлы реализации(.cpp)}\\
+        \hfill\break
+        \textit{redactor.cpp} - содержит реализацию методов основного диалогового окна\\
+        \hfill\break     
+        \textit{studenttable.cpp} - содержит реализацию методов модели таблицы, а также перегрузки операторов << и >> для ввода/вывода структур Person через поток QDataStream\\        
+        \hfill\break
+        \textit{main.cpp} - точка входа в программу, вызывает конструктор окна Redactor и осуществляет его показ мотодом show\\
+        \hfill\break
+        \hfill\break
+{\bf 3)Файлы интерфейса(.ui)}\\ 
+       \hfill\break
+       \textit{redactor.ui} - интерфейс главного диалогового окна\\
+       \hfill\break
+       \hfill\break       
+}
+	
+	\newpage %Аннотация
+	
+	\newpage %Введение
+	
+	\newpage %Результаты 
+	{\section{Описание классов Redactor и StudentTable}
+	%Класс список	
+	{\LARGE \bf StudentTable}\\
+	\hfill\break
+	Класс StudentTable унаследован от класса QAbstractTableModel и содержит все его невиртуальные методы. В StudentTable находится вложенная структура Person(QString,uint,uint)\\
+	\hfill\break
+	\hfill \break
+	1){\bf Конструктор, возвращает модель данных(таблицу):}\\
+	     \hfill \break
+	     \textit{StudentTable(QObject*parent=0)}\\
+	     \hfill \break
+	     \hfill \break
+	2){\bf Вставка строки в таблицу:}\\
+	     \hfill \break
+	     \textit{bool insertRows(int position, int rows, const QModelIndex \&index)}\\
+	     \hfill\break
+	     Возвращает true, если вставка прошла успешно.\\
+	     \hfill \break
+	     \hfill \break
+	3){\bf Удаление строки в таблице:}\\
+         \hfill \break	
+	     \textit{bool removeRows(int position, int rows, const QModelIndex \&index)}\\
+	     \hfill\break
+	     Возвращает true, если вставка прошла успешно.\\
+	     \hfill\break
+	     \hfill\break
+	4) {\bf Количество строк в таблице:}\\
+	     \hfill\break
+	     \textit{int rowCount(const QModelIndex \&parent = QModelIndex()) const}\\
+	     \hfill\break
+	     Возвращает число строк – размер контейнера для хранения структур.\\
+	     \hfill\break
+	     \hfill\break
+	5) {\bf Количество столбцов в таблице:}\\
+         \hfill\break	
+	     \textit{int columnCount(const QModelIndex \&parent = QModelIndex()) const}\\
+	     \hfill\break
+	     Возвращает число столбцов – фиксировано 3.\\
+	     \hfill\break
+	     \hfill\break
+	6){\bf Отрисовка данных в таблице. Вызывается как автоматически моделью, так и явно:}\\
+	     \hfill\break
+	     \textit{QVariant data(const QModelIndex \&index, int role = Qt::DisplayRole) const}\\
+	     \hfill\break
+	     Возвращает шаблонный тип данных QVariant, содержащий данные из одной ячейки.\\
+	     \hfill\break
+	     \hfill\break
+	7){\bf Запись данных в таблицу. Позволяет вручную внести данные в ячейку таблицу:}\\
+	     \hfill\break
+	     \textit{bool setData(const QModelIndex \&index, const QVariant \&value, int role = Qt::EditRole)}\\
+	     \hfill\break
+	     Возвращает true, если запись прошла успешно.\\
+	     \hfill\break
+	     \hfill\break
+	8){\bf Отрисовка данных в заголовках столбцов. Автоматически вызывается моделью:}\\
+	     \hfill\break
+	     \textit{QVariant headerData(int section, Qt::Orientation orientation, int role) const}\\
+	     \hfill\break
+	     В текущей реализации возвращает пустое значение.\\
+	     \hfill\break
+	     \hfill\break
+	9){\bf Получение состояния текущей ячейки в таблице. Автоматически вызывается моделью:}\\    
+	     \hfill\break
+	     \textit{Qt::ItemFlags flags (const QModelIndex \&index) const}\\
+	     \hfill\break
+	     Возвращает тип данных флаг: ItemFlags.\\
+	     \hfill\break
+	     \hfill\break
+	     Данные класса StudentTable:\\
+	     \hfill\break
+	     QVector <Person> students - контейнер для хранения структур из файла.\\
+	     \hfill\break
+	     StudentTable содержит перегрузки вывода структур Person в поток QDataStream. Принцип сериализации структуры состоит в ее разбиении на составные типы данных.\\
+	     \hfill\break
+	     \hfill\break   
+	В файле studenttable.h содержится структура Person, которая хранит в себе основные строки таблицы\\
+	    \hfill \break
+	    \textit{QString name} - имя студента\\
+	    \textit{uint course} - номер курса\\        
+	    \textit{uint group} - номер группы\\
+        \hfill\break
+        \hfill\break 
+        
+ {\LARGE \bf Redactor}\\
+        \hfill\break
+        Класс Redactor унаследован от класса QMainWindow.\\
+        \hfill\break
+        
+    1){\bf Конструктор, создает экземпляр диалогового окна:}\\
+        \hfill\break
+        \textit{Redactor(QWidget *parent = 0)}\\
+        \hfill\break
+        Создает модель типа StudentTable, затем присваивает ее виджету для таблиц QTableWidget.\\
+        \hfill\break
+        \hfill\break
+    2){\bf Слот открытия таблицы:}\\
+        \hfill\break
+        \textit{void on\_actionOpen\_triggered()}\\
+        \hfill\break
+        Создает диалоговое окна выбора файла, затем открывает поток по выбранному имени. Данные из файла переносятся в новую модель таблицы, которая затем присваивается виджету.\\
+        \hfill\break
+        \hfill\break
+    3){\bf Слот сохранения таблицы:}
+        \hfill\break
+        \textit{void on\_actionSave\_triggered()}\\
+        \hfill\break
+        Создает диалоговое окно создания файла, затем открывает поток по введенному имени файла. Данные из таблицы построчно записываются в файл.\\
+        \hfill\break
+        \hfill\break
+    4){\bf Слот создания новой таблицы:}\\
+        \hfill\break
+        \textit{void on\_actionCreate\_new\_triggered()}\\
+        \hfill\break
+        Создает новую таблицу из трех пустых строк.\\
+        \hfill\break
+        \hfill\break
+    5){\bf Слот открытия диалогового окна About:}\\
+        \hfill\break
+        \textit{void on\_actionAbout\_triggered()}\\
+        \hfill\break
+        Создает новое окно с помощю QMessageBox::about и заполняет его данными о разработчиках.\\
+        \hfill\break
+        \hfill\break
+    6){\bf Слот закрытия программы:}\\
+        \hfill\break
+        \textit{void on\_actionQuit\_triggered()}\\
+        \hfill\break
+        Вызывает метод QApplication::quit().\\
+        \hfill\break
+        \hfill\break
+    7){\bf Слот кнопки для добавления новой строки в таблицу:}\\
+        \hfill\break
+        \textit{void on\_addButton\_clicked()}\\
+        \hfill\break
+        Вызывает метод StudentTable::InsertRows и получает индекс выбранной ячейки в таблице.\\
+        \hfill\break
+        \hfill\break
+    8){\bf Слот кнопки для удаления выбранной строки в таблице:}\\
+        \hfill\break
+        \textit{void on\_deleteButton\_clicked()}\\
+        \hfill\break
+        Вызывает метод StudentTable::RemoveRows и получает индекс выбранной ячейки в таблице.\\
+        \hfill\break
+        \hfill\break               
+    }
+       
+    {\section{Особенности реализации программы}
+    Программа является полноценным редактором таблиц, реализующим связку модель данных <-> виджет.\\
+    
+    Для улучшения внешнего вида приложения была добавлена иконка, которая отображается в заголовке окна и в диалоговом окне About.\\
+    
+    Для невозможности растяжения окна после запуска приложения были установлены максимальные и минимальные размеры окна, с соответствующей блокировкой кнопки “На весь экран”.\\
+    
+    Кнопки Save, Create New, Open, About и Quit были внесены в закладку File, расположенную в верхней части окна. Для наглядности, некоторые действия были разграничены линиями.\\
+    
+    В программе производится обработка ошибочных ситуаций, таких как попытка удаления последней строки в файле. При ошибке открытия/сохранения файла выводится диалоговое окно QMessageBox::critical.\\      
+    }   	            
+\end{document}
